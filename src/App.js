@@ -6,7 +6,7 @@ import React, { useRef, useState } from 'react';
 function App() {
   const [data, setData] = useState([]);
 
-  const dataId = useRef(0);
+  const dataId = useRef(1);
 
   const onCreate = (author, content, emotion) => {
     const created_date = new Date().getTime();
@@ -21,10 +21,23 @@ function App() {
     setData([newItem, ...data]);
   };
 
+  const onRemove = (targetId) => {
+    const newDiaryList = data.filter((item) => item.id !== targetId);
+    setData(newDiaryList);
+  };
+
+  const onEdit = (targetId, newContent) => {
+    setData(
+      data.map((item) =>
+        item.id === targetId ? { ...item, content: newContent } : item
+      )
+    );
+  };
+
   return (
     <div className="App">
       <DiaryEditor onCreate={onCreate} />
-      <DiaryList diaryList={data} />
+      <DiaryList onEdit={onEdit} onRemove={onRemove} diaryList={data} />
     </div>
   );
 }
