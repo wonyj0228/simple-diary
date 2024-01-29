@@ -1,0 +1,47 @@
+.DiaryForm {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.DiaryForm table {
+  width: 700px;
+  height: 300px;
+}
+
+.DiaryForm input,
+.DiaryForm textarea,
+.DiaryForm select {
+  width: 100%;
+  height: 40px;
+  padding: 10px;
+  font-size: 13px;
+  box-sizing: border-box;
+}
+
+.DiaryForm textarea {
+  height: 100px;
+  resize: none;
+}
+
+.DiaryForm select {
+  text-align: center;
+}
+
+.DiaryForm table th {
+  font-size: 16px;
+  width: 100px;
+  text-align: left;
+}
+
+.DiaryForm table {
+  margin-bottom: 30px;
+}
+
+.DiaryForm button {
+  width: 700px;
+  height: 50px;
+  background-color: beige;
+  cursor: pointer;
+  border: solid 1px gray;
+}
