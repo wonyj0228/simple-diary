@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useRef, useState } from 'react';
 
 function DiaryForm({ onCreate }) {
   const [data, setData] = useState({
@@ -7,8 +7,22 @@ function DiaryForm({ onCreate }) {
     emotion: 1,
   });
 
+  const titleInput = useRef();
+  const contentInput = useRef();
+
   const handleSubmit = () => {
+    if (data.title.length < 3) {
+      titleInput.current.focus();
+      return;
+    }
+
+    if (data.content.length < 5) {
+      contentInput.current.focus();
+      return;
+    }
+
     onCreate(data.title, data.content, data.emotion);
+    alert('저장되었습니다');
   };
 
   return (
@@ -21,6 +35,7 @@ function DiaryForm({ onCreate }) {
             <th>제목</th>
             <td>
               <input
+                ref={titleInput}
                 value={data.title}
                 onChange={(e) => setData({ ...data, title: e.target.value })}
               />
@@ -30,6 +45,7 @@ function DiaryForm({ onCreate }) {
             <th>내용</th>
             <td>
               <textarea
+                ref={contentInput}
                 value={data.content}
                 onChange={(e) => setData({ ...data, content: e.target.value })}
               />
