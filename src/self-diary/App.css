@@ -2,11 +2,15 @@
   display: flex;
   flex-direction: column;
   align-items: center;
+  border: 1px solid gray;
+  padding: 40px 20px;
+  margin-bottom: 40px;
 }
 
 .DiaryForm table {
   width: 700px;
   height: 300px;
+  margin-bottom: 30px;
 }
 
 .DiaryForm input,
@@ -34,14 +38,40 @@
   text-align: left;
 }
 
-.DiaryForm table {
-  margin-bottom: 30px;
-}
-
 .DiaryForm button {
   width: 700px;
   height: 50px;
   background-color: beige;
   cursor: pointer;
   border: solid 1px gray;
+}
+
+.DiaryList {
+  border: 1px solid gray;
+  padding: 40px 20px;
+}
+
+.DiaryList h2 {
+  text-align: center;
+}
+
+.DiaryItem {
+  background-color: lightgrey;
+  padding: 20px 10px;
+  margin-bottom: 15px;
+}
+
+.title {
+  font-weight: bold;
+  font-size: 18px;
+}
+
+.detail {
+  color: rgb(114, 114, 114);
+}
+
+.content {
+  margin-top: 10px;
+  padding: 15px 0;
+  border-top: 1px solid black;
 }
