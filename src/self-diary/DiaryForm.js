@@ -23,6 +23,12 @@ function DiaryForm({ onCreate }) {
 
     onCreate(data.title, data.content, data.emotion);
     alert('저장되었습니다');
+
+    setData({
+      title: '',
+      content: '',
+      emotion: 1,
+    });
   };
 
   return (
