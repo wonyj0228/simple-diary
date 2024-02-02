@@ -22,10 +22,25 @@ function App() {
     dataId.current++;
   };
 
+  const onRemove = (id) => {
+    const newData = dataList.filter((data) => id !== data.id);
+    setDataList(newData);
+  };
+
+  const onEdit = (id, newContent) => {
+    const newData = dataList.map((data) => {
+      if (data.id === id) {
+        data.content = newContent;
+      }
+      return data;
+    });
+    setDataList(newData);
+  };
+
   return (
     <div>
       <DiaryForm onCreate={onCreate} />
-      <DiaryList dataList={dataList} />
+      <DiaryList dataList={dataList} onRemove={onRemove} onEdit={onEdit} />
     </div>
   );
 }

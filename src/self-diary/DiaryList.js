@@ -1,6 +1,6 @@
 import DiaryItem from './DiaryItem';
 
-function DiaryList({ dataList }) {
+function DiaryList({ dataList, onRemove, onEdit }) {
   return (
     <div className="DiaryList">
       <h2>일기 리스트</h2>
@@ -8,7 +8,12 @@ function DiaryList({ dataList }) {
 
       <div>
         {dataList.map((data) => (
-          <DiaryItem key={data.id} {...data} />
+          <DiaryItem
+            key={data.id}
+            {...data}
+            onRemove={onRemove}
+            onEdit={onEdit}
+          />
         ))}
       </div>
     </div>
