@@ -1,5 +1,6 @@
 import DiaryForm from './DiaryForm';
 import './App.css';
+import '../reset.css';
 import { useRef, useState } from 'react';
 import DiaryList from './DiaryList';
 

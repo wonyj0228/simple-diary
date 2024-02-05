@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useRef, useState } from 'react';
 
 function DiaryItem({
   title,
@@ -11,13 +11,27 @@ function DiaryItem({
 }) {
   const [edit, setEdit] = useState(false);
   const [newContent, setNewContent] = useState(content);
+  const newContentInput = useRef();
+
+  const toggleEdit = () => {
+    setEdit((prev) => !prev);
+  };
 
   const handleEdit = () => {
-    if (edit) {
-      onEdit(id, newContent);
+    if (newContent.length < 5) {
+      newContentInput.current.focus();
+      return;
     }
 
-    setEdit((prev) => !prev);
+    if (window.confirm(`${id}번 째 일기를 수정하시겠습니까?`)) {
+      onEdit(id, newContent);
+      toggleEdit();
+    }
+  };
+
+  const handleEditQuit = () => {
+    setNewContent(content);
+    toggleEdit();
   };
 
   const handleRemove = () => {
@@ -30,7 +44,6 @@ function DiaryItem({
     <div className="DiaryItem">
       <div className="info">
         <span className="title">{title}</span>
-        <br />
         <span className="detail">
           오늘의 감정 점수 : {emotion} | 작성일 :
           {new Date(created_date).toLocaleString()}
@@ -40,6 +53,7 @@ function DiaryItem({
       <div className="content">
         {edit ? (
           <textarea
+            ref={newContentInput}
             value={newContent}
             onChange={(e) => setNewContent(e.target.value)}
           />
@@ -48,8 +62,17 @@ function DiaryItem({
         )}
       </div>
       <div>
-        <button onClick={handleEdit}>수정하기</button>
-        <button onClick={handleRemove}>삭제하기</button>
+        {edit ? (
+          <>
+            <button onClick={handleEdit}>수정 완료</button>
+            <button onClick={handleEditQuit}>수정 취소</button>
+          </>
+        ) : (
+          <>
+            <button onClick={toggleEdit}>수정하기</button>
+            <button onClick={handleRemove}>삭제하기</button>
+          </>
+        )}
       </div>
     </div>
   );
