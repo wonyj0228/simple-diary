@@ -1,4 +1,4 @@
-import { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 
 const DiaryItem = ({
   onEdit,
@@ -12,6 +12,10 @@ const DiaryItem = ({
   // key : element로 list를 만들때 포함해야하는 특수한 어트리뷰트
   // 요소에 고유성을 부여하기 위해서 사용
   // 배열의 index는 순번이 바뀔 수 있음으로 지양하고 고유 id를 주는 것이 이상적임
+
+  useEffect(() => {
+    console.log(`${id}번째 아이템 렌더`);
+  });
 
   const [isEdit, setIsEdit] = useState(false);
   const toggleIsEdit = () => setIsEdit(!isEdit);
@@ -83,4 +87,4 @@ const DiaryItem = ({
   );
 };
 
-export default DiaryItem;
+export default React.memo(DiaryItem);

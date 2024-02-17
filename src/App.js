@@ -1,7 +1,13 @@
 import './App.css';
 import DiaryEditor from './DiaryEditor';
 import DiaryList from './DiaryList';
-import React, { useRef, useState, useEffect, useMemo } from 'react';
+import React, {
+  useRef,
+  useState,
+  useEffect,
+  useMemo,
+  useCallback,
+} from 'react';
 
 function App() {
   const [data, setData] = useState([]);
@@ -30,7 +36,10 @@ function App() {
     getData();
   }, []);
 
-  const onCreate = (author, content, emotion) => {
+  // App component가 렌더될 때 마다 재생성됨
+  // 컴포넌트가 mount 되는 시점에 한번만 실행됨.
+  // 고로 mount 되는 시점에는 data state가 빈배열이었고, 데이터 저장시에도 빈배열을 추가하게됨
+  const onCreate = useCallback((author, content, emotion) => {
     const created_date = new Date().getTime();
     const newItem = {
       author,
@@ -40,21 +49,22 @@ function App() {
       id: dataId.current,
     };
     dataId.current++;
-    setData([newItem, ...data]);
-  };
+    setData((data) => [newItem, ...data]);
+  }, []);
+  // dependency Array를 비우고, setData에서 PrevData를 받아오는 형식으로 수정하면
+  // 저장,삭제 시 이 함수가 재생성 되는걸 막을 수 있다.
 
-  const onRemove = (targetId) => {
-    const newDiaryList = data.filter((item) => item.id !== targetId);
-    setData(newDiaryList);
-  };
+  const onRemove = useCallback((targetId) => {
+    setData((data) => data.filter((item) => item.id !== targetId));
+  }, []);
 
-  const onEdit = (targetId, newContent) => {
-    setData(
+  const onEdit = useCallback((targetId, newContent) => {
+    setData((data) =>
       data.map((item) =>
         item.id === targetId ? { ...item, content: newContent } : item
       )
     );
-  };
+  }, []);
 
   const getDiaryAnalysis = useMemo(() => {
     const goodCount = data.filter((item) => item.emotion >= 3).length;
