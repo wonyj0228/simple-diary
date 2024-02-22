@@ -3,14 +3,43 @@ import DiaryEditor from './DiaryEditor';
 import DiaryList from './DiaryList';
 import React, {
   useRef,
-  useState,
   useEffect,
   useMemo,
   useCallback,
+  useReducer,
 } from 'react';
 
+const reducer = (state, action) => {
+  switch (action.type) {
+    case 'INIT': {
+      return action.data;
+    }
+    case 'CREATE': {
+      const created_date = new Date().getTime();
+      const newItem = {
+        ...action.data,
+        created_date,
+      };
+      return [newItem, ...state];
+    }
+    case 'REMOVE': {
+      return state.filter((it) => it.id !== action.targetId);
+    }
+
+    case 'EDIT': {
+      return state.map((it) =>
+        it.id === action.targetId ? { ...it, content: action.newContent } : it
+      );
+    }
+    default:
+      return state;
+  }
+};
+
 function App() {
-  const [data, setData] = useState([]);
+  // const [data, setData] = useState([]);
+
+  const [data, dispatch] = useReducer(reducer, []);
 
   const dataId = useRef(1);
 
@@ -29,7 +58,7 @@ function App() {
       };
     });
 
-    setData(initData);
+    dispatch({ type: 'INIT', data: initData });
   };
 
   useEffect(() => {
@@ -40,30 +69,21 @@ function App() {
   // 컴포넌트가 mount 되는 시점에 한번만 실행됨.
   // 고로 mount 되는 시점에는 data state가 빈배열이었고, 데이터 저장시에도 빈배열을 추가하게됨
   const onCreate = useCallback((author, content, emotion) => {
-    const created_date = new Date().getTime();
-    const newItem = {
-      author,
-      content,
-      emotion,
-      created_date,
-      id: dataId.current,
-    };
+    dispatch({
+      type: 'CREATE',
+      data: { author, content, emotion, id: dataId.current },
+    });
     dataId.current++;
-    setData((data) => [newItem, ...data]);
   }, []);
   // dependency Array를 비우고, setData에서 PrevData를 받아오는 형식으로 수정하면
   // 저장,삭제 시 이 함수가 재생성 되는걸 막을 수 있다.
 
   const onRemove = useCallback((targetId) => {
-    setData((data) => data.filter((item) => item.id !== targetId));
+    dispatch({ type: 'REMOVE', targetId });
   }, []);
 
   const onEdit = useCallback((targetId, newContent) => {
-    setData((data) =>
-      data.map((item) =>
-        item.id === targetId ? { ...item, content: newContent } : item
-      )
-    );
+    dispatch({ type: 'EDIT', targetId, newContent });
   }, []);
 
   const getDiaryAnalysis = useMemo(() => {
